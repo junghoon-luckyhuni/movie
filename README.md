@@ -54,6 +54,10 @@
 ./gradlew projectDependencyGraph
 ```
 
+### Mendable
+
+<img width="1844" alt="image" src="https://github.com/junghoon-luckyhuni/movie/assets/35446333/1851ee4a-b72c-452d-a64d-6685c9ffc9da">
+
 ### ScreenShot
 
 <img alt="image" src="https://github.com/junghoon-luckyhuni/movie/assets/35446333/533ad1a8-9841-4c0d-9173-151c2a73d7d7">
