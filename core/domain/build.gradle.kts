@@ -1,3 +1,4 @@
+
 plugins {
     id("junghoon.android.library")
 }
@@ -8,4 +9,5 @@ android {
 
 dependencies {
     implementation(libs.inject)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
 }

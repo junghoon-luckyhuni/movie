@@ -1,5 +1,9 @@
 package com.junghoon.movie.core.domain.model
 
+import androidx.compose.runtime.Immutable
+
+
+@Immutable
 data class MovieDetail(
     val id: Int,
     val backdropPath: String?,

@@ -35,6 +35,7 @@ import com.junghoon.movie.core.ui.NetworkImage
 import com.junghoon.movie.core.ui.base.ErrorState
 import com.junghoon.movie.core.ui.theme.MovieTheme
 import com.junghoon.movie.core.ui.theme.PaleGray
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -110,7 +111,7 @@ private fun HomeSectionTitle(modifier: Modifier = Modifier, title: String) {
 }
 
 @Composable
-fun TopRatedSection(movies: List<Movie>, onMovieClick: (Int) -> Unit) {
+fun TopRatedSection(movies: PersistentList<Movie>, onMovieClick: (Int) -> Unit) {
     Column {
         HomeSectionTitle(
             modifier = Modifier.padding(horizontal = 20.dp),
@@ -144,7 +145,7 @@ fun TopRatedSection(movies: List<Movie>, onMovieClick: (Int) -> Unit) {
 }
 
 @Composable
-private fun NowPlaySection(movies: List<Movie>, onMovieClick: (Int) -> Unit) {
+private fun NowPlaySection(movies: PersistentList<Movie>, onMovieClick: (Int) -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         HomeSectionTitle(title = stringResource(id = R.string.now_playing_label))
 
@@ -172,7 +173,7 @@ private fun NowPlaySection(movies: List<Movie>, onMovieClick: (Int) -> Unit) {
 }
 
 @Composable
-private fun UpcomingSection(movies: List<Movie>, onMovieClick: (Int) -> Unit) {
+private fun UpcomingSection(movies: PersistentList<Movie>, onMovieClick: (Int) -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         HomeSectionTitle(title = stringResource(id = R.string.upcoming_label))
 
