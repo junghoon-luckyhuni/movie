@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_message_network">Network Error</string>
+    <string name="error_message_api">Api Error</string>
+    <string name="home">Home</string>
+    <string name="popular">Popular</string>
+</resources>
