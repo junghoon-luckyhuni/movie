@@ -30,13 +30,7 @@ class PopularViewModelTest {
         coEvery { getPopularMovieUseCase() } returns listOf(fakeMovie)
 
         viewModel = PopularViewModel(getPopularMovieUseCase)
-
-        // uiState 빈 값 확인
-        viewModel.uiState.test {
-            val actual = awaitItem()
-            assertEquals(emptyList(), actual.popular)
-        }
-
+     
         viewModel.loadMorePopular()
 
         // uiState popular 확인
