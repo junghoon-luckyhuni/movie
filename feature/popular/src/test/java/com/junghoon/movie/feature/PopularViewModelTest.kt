@@ -7,11 +7,13 @@ import com.junghoon.movie.core.testing.rule.MainDispatcherRule
 import com.junghoon.movie.core.ui.base.ErrorState
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 class PopularViewModelTest {
 
@@ -24,20 +26,24 @@ class PopularViewModelTest {
     private val fakeMovie = Movie.createFake()
 
     @Test
-    fun `Popular 영화 정보 페이징을 확인한다`() = runTest {
+    fun `Popular 영화 정보 페이징 데이터를 확인한다`() = runTest {
         // given
         coEvery { getPopularMovieUseCase.canPaginate } returns true
         coEvery { getPopularMovieUseCase() } returns listOf(fakeMovie)
 
         viewModel = PopularViewModel(getPopularMovieUseCase)
-     
+
+        // when
+        val expectedPage2 = Movie.createFake(2)
+        coEvery { getPopularMovieUseCase() } returns listOf(expectedPage2)
         viewModel.loadMorePopular()
 
-        // uiState popular 확인
+        // then
         viewModel.uiState.test {
             val actual = awaitItem()
             assertEquals(false, actual.isLoading)
-            assertEquals(listOf(fakeMovie), actual.popular)
+            assertEquals(true, actual.popular.any { it.id == fakeMovie.id })
+            assertEquals(true, actual.popular.any { it.id == expectedPage2.id })
         }
     }
 
