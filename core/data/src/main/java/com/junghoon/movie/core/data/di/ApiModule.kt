@@ -24,14 +24,7 @@ internal object ApiModule {
     @Singleton
     fun provideOkhttpClient(): OkHttpClient {
         val client = OkHttpClient.Builder()
-
-        val apiKeyInterceptor = ApiKeyInterceptor()
-
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-
-        client.addInterceptor(apiKeyInterceptor)
-        client.addInterceptor(loggingInterceptor)
+        client.addInterceptor(ApiKeyInterceptor())
 
         return client.build()
     }
