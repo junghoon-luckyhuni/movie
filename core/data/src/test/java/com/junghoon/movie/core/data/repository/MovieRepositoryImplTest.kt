@@ -1,0 +1,50 @@
+package com.junghoon.movie.core.data.repository
+
+import com.junghoon.movie.core.data.api.MovieApi
+import com.junghoon.movie.core.data.api.model.MovieDetailResponse
+import com.junghoon.movie.core.data.api.model.MoviesListResponse
+import com.junghoon.movie.core.data.mapper.toData
+import com.junghoon.movie.core.domain.model.MovieType
+import com.junghoon.movie.core.domain.model.Movies
+import com.junghoon.movie.core.domain.repository.MovieRepository
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.flow.first
+
+class MovieRepositoryImplTest : StringSpec(
+    {
+        val movieApi: MovieApi = mockk()
+        val movieRepository: MovieRepository = MovieRepositoryImpl(movieApi)
+
+        "홈 영화 가져오기 모델 변환 테스트" {
+            val expected = MoviesListResponse.createFake().results.first().toData()
+            coEvery { movieApi.getHomeMovies(MovieType.NOW_PLAYING.type) } returns MoviesListResponse.createFake()
+
+            val flow = movieRepository.getHomeMovies(MovieType.NOW_PLAYING)
+
+            val actual = flow.first()
+            actual.first() shouldBe expected
+        }
+
+        "영화 상세 가져오기 모델 변환 테스트" {
+            val movieId = 1
+            val expected = MovieDetailResponse.createFake()
+            coEvery { movieApi.getMovieDetail(movieId) } returns expected
+
+            val actual = movieRepository.getMovieDetail(movieId)
+
+            actual shouldBe expected.toData()
+        }
+
+        "Popular 영화 가져오기 모델 변환 테스트" {
+            val expected = Movies.fakeMoviesPage1()
+            coEvery { movieApi.getPopularMovies(1) } returns MoviesListResponse.createFake()
+
+            val actual = movieRepository.getPopularMovies(1)
+
+            actual shouldBe expected
+        }
+    }
+)

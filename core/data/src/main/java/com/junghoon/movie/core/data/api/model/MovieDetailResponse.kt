@@ -15,4 +15,16 @@ data class MovieDetailResponse(
     @SerialName("vote_average")
     val rating: Double,
     val overview: String
-)
+) {
+    companion object {
+        fun createFake(): MovieDetailResponse = MovieDetailResponse(
+            id = 1,
+            backdropPath = "sKdDC38FHuPvEsRgIzMEQE6ydol.jpg",
+            posterPath = "2TmZ2lgDEYJAFpeUMALRx5NwqK.jpg",
+            title = "Blue_Whale",
+            tagline = "Brace yourself",
+            rating = 8.5,
+            overview = "Characters from different"
+        )
+    }
+}
