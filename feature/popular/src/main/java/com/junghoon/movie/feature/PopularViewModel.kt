@@ -34,18 +34,26 @@ class PopularViewModel @Inject constructor(
         }
     }
 
-    private fun getPopularMovies() {
+    fun pullToRefresh() {
+        getPopularMovies(true)
+    }
+
+    private fun getPopularMovies(pullToRefresh: Boolean = false) {
         _uiState.update {
             it.copy(isLoading = true)
         }
 
         launchWithExceptionHandler {
-            val popular = getPopularMovieUseCase.invoke()
+            val newPopular = getPopularMovieUseCase.invoke(pullToRefresh)
 
             _uiState.update {
                 it.copy(
                     isLoading = false,
-                    popular = popular.toPersistentList()
+                    popular = if (pullToRefresh) {
+                        newPopular.toPersistentList()
+                    } else {
+                        (it.popular + newPopular).toPersistentList()
+                    }
                 )
             }
         }

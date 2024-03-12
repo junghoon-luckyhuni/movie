@@ -8,14 +8,18 @@ class GetPopularMovieUseCase @Inject constructor(
     private val movieRepository: MovieRepository,
 ) {
     private var page: Int? = null
-    private val movies: MutableList<Movie> = mutableListOf()
+    private val cachedMovies: MutableList<Movie> = mutableListOf()
     var canPaginate = true
         private set
 
     suspend operator fun invoke(pullToRefresh: Boolean = false): List<Movie> {
-        if (page == null || pullToRefresh) {
+        if (pullToRefresh) {
+            page = null
+        }
+
+        if (page == null) {
             canPaginate = true
-            movies.clear()
+            cachedMovies.clear()
         }
 
         if (canPaginate) {
@@ -28,12 +32,16 @@ class GetPopularMovieUseCase @Inject constructor(
             }
 
             val newMovies = response.results.filter { newMovie ->
-                !movies.any { it.id == newMovie.id }
+                !cachedMovies.any { cachedMovie ->
+                    cachedMovie.id == newMovie.id
+                }
             }
 
-            movies.addAll(newMovies)
+            cachedMovies.addAll(newMovies)
+
+            return newMovies
         }
 
-        return movies
+        return emptyList()
     }
 }
