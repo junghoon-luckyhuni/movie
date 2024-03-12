@@ -32,6 +32,7 @@
 - JUnit4
 - Mockk
 - Turbine
+- Kotest
 
 ## Architecture
 
