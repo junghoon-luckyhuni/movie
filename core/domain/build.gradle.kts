@@ -10,4 +10,6 @@ android {
 dependencies {
     implementation(libs.inject)
     implementation(libs.androidx.lifecycle.runtimeCompose)
+
+    testImplementation(project(":core:testing"))
 }

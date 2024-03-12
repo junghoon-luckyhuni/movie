@@ -27,7 +27,21 @@ data class Movies(
     val results: List<Movie>,
     val totalPages: Int,
     val totalResults: Int
-)
+) {
+    companion object {
+        fun fakeMoviesPage1(): Movies {
+            return Movies(1, listOf(Movie.createFake()), 3, 3)
+        }
+
+        fun fakeMoviesPage2(): Movies {
+            return Movies(2, listOf(Movie.createFake()), 3, 3)
+        }
+
+        fun fakeMoviesPage3(): Movies {
+            return Movies(3, listOf(Movie.createFake(3)), 3, 3)
+        }
+    }
+}
 
 enum class MovieType(val type: String) {
     NOW_PLAYING("now_playing"), TOP_RATED("top_rated"), UPCOMING("upcoming")
