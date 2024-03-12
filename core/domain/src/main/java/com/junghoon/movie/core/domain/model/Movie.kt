@@ -1,6 +1,7 @@
 package com.junghoon.movie.core.domain.model
 
 import androidx.compose.runtime.Immutable
+import com.junghoon.movie.core.domain.Constants.IMAGE_DOMAIN
 
 
 @Immutable
@@ -11,10 +12,10 @@ data class Movie(
     val title: String
 ) {
     companion object {
-        fun createFake() = Movie(
-            id = 1,
-            backdropPath = "https://image.tmdb.org/t/p/w500/sKdDC38FHuPvEsRgIzMEQE6ydol.jpg",
-            posterPath = "https://image.tmdb.org/t/p/w500/2TmZ2lgDEYJAFpeUMALRx5NwqK.jpg",
+        fun createFake(id: Int = 1) = Movie(
+            id = id,
+            backdropPath = "${IMAGE_DOMAIN}sKdDC38FHuPvEsRgIzMEQE6ydol.jpg",
+            posterPath = "${IMAGE_DOMAIN}2TmZ2lgDEYJAFpeUMALRx5NwqK.jpg",
             title = "Blue_Whale"
         )
     }

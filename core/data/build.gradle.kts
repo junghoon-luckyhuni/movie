@@ -6,6 +6,15 @@ plugins {
 
 android {
     namespace = "com.junghoon.movie.core.data"
+
+    defaultConfig {
+        buildConfigField("String", "API_DOMAIN", "\"https://api.themoviedb.org/3/\"")
+        buildConfigField("String", "API_KEY", "\"515cc35a4a5a0d8846cea73d1de167bf\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

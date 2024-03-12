@@ -1,6 +1,7 @@
 package com.junghoon.movie.core.data.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.junghoon.movie.core.data.BuildConfig
 import com.junghoon.movie.core.data.api.MovieApi
 import com.junghoon.movie.core.data.api.intercepter.ApiKeyInterceptor
 import dagger.Module
@@ -50,7 +51,7 @@ internal object ApiModule {
         converterFactory: Converter.Factory,
     ): MovieApi {
         return Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(BuildConfig.API_DOMAIN)
             .addConverterFactory(converterFactory)
             .client(okHttpClient).build()
             .create(MovieApi::class.java)
