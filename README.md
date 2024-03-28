@@ -17,6 +17,7 @@
   - Core
   - Lifecycle & ViewModel Compose
   - Navigation
+  - DataStore
 
 - Kotlin Libraries (Coroutine, Serialization)
 - Compose
@@ -24,7 +25,7 @@
   - Navigation
 
 - Landscapist & Landscapist Coil
-- Dagger & Hilt
+- Hilt
 - Square (Retrofit, OkHttp)
 
 ### Test
@@ -43,7 +44,7 @@
 
 ### Module
 
-![project dot](https://github.com/junghoon-luckyhuni/movie/assets/35446333/7f1375b1-ab07-40fc-9f6e-98f74b718ce5)
+![project dot](https://github.com/junghoon-luckyhuni/movie/assets/35446333/61637206-e63f-410a-9373-9bc2f6a4d569)
 
 **Module Graph 생성 방법**
 
