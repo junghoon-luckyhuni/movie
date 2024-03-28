@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
     suspend fun getPopularMovies(page: Int?): Movies
-    suspend fun getMovieDetail(id: Int): MovieDetail
-    suspend fun getHomeMovies(movieType: MovieType): Flow<List<Movie>>
+    fun getMovieDetail(id: Int): Flow<MovieDetail>
+    fun getHomeMovies(movieType: MovieType): Flow<List<Movie>>
+    fun getLikedMovieIds(): Flow<Set<String>>
+    suspend fun updateMovieLike(id: String, isLike: Boolean)
 }

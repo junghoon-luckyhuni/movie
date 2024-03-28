@@ -1,6 +1,6 @@
 package com.junghoon.movie
 
-import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,11 +23,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -36,14 +36,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junghoon.movie.core.domain.model.MovieDetail
-import com.junghoon.movie.core.ui.AnimatedLoadingView
-import com.junghoon.movie.core.ui.NetworkImage
-import com.junghoon.movie.core.ui.RatingBar
 import com.junghoon.movie.core.ui.base.ErrorState
+import com.junghoon.movie.core.ui.component.AnimatedLoadingView
+import com.junghoon.movie.core.ui.component.LikeIcon
+import com.junghoon.movie.core.ui.component.NetworkImage
+import com.junghoon.movie.core.ui.component.RatingBar
 import com.junghoon.movie.core.ui.theme.PaleGray
 import com.junghoon.movie.feature.detail.R
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.time.delay
 
 @Composable
 internal fun MovieDetailRoute(
@@ -65,26 +64,25 @@ internal fun MovieDetailRoute(
         viewModel.getMovieDetail(movieId)
     }
 
-    MovieDetailScreen(uiState = movieDetailUiState, onBackClick = onBackClick)
+    MovieDetailScreen(
+        uiState = movieDetailUiState,
+        onBackClick = onBackClick,
+        onLikeClick = { id, isLike ->
+            viewModel.updateLikeMovie(id, isLike)
+        }
+    )
 }
 
 @Composable
-internal fun MovieDetailScreen(uiState: DetailUiState, onBackClick: () -> Unit) {
+internal fun MovieDetailScreen(uiState: DetailUiState, onBackClick: () -> Unit, onLikeClick: (Int, Boolean) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
             .verticalScroll(rememberScrollState())
     ) {
-        IconButton(
-            onClick = onBackClick,
-            modifier = Modifier.size(48.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = null,
-            )
-        }
+
+        MovieDetailTopBarSection(uiState = uiState, onBackClick = onBackClick, onLikeClick = onLikeClick)
 
         when (uiState) {
             is DetailUiState.Loading -> {
@@ -96,6 +94,36 @@ internal fun MovieDetailScreen(uiState: DetailUiState, onBackClick: () -> Unit) 
             }
 
             is DetailUiState.Detail -> MovieDetailSection(uiState = uiState)
+        }
+    }
+}
+
+@Composable
+private fun MovieDetailTopBarSection(
+    uiState: DetailUiState,
+    onBackClick: () -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
+) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        IconButton(
+            onClick = onBackClick,
+            modifier = Modifier.size(48.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = null,
+            )
+        }
+
+        if (uiState is DetailUiState.Detail) {
+            uiState.movieDetail.let { movieDetail ->
+                LikeIcon(
+                    isLike = movieDetail.isLike,
+                    onLikeClick = {
+                        onLikeClick(movieDetail.id, !movieDetail.isLike)
+                    }
+                )
+            }
         }
     }
 }

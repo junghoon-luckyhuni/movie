@@ -1,4 +1,4 @@
-package com.junghoon.movie.core.ui
+package com.junghoon.movie.core.ui.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment

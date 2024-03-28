@@ -1,4 +1,4 @@
-package com.junghoon.movie.core.ui
+package com.junghoon.movie.core.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.junghoon.movie.core.ui.R
 import kotlinx.coroutines.delay
 
 @Composable

@@ -22,6 +22,7 @@ include(
     ":core:data",
     ":core:domain",
     ":core:ui",
+    ":core:datastore",
     ":core:testing",
 
     ":feature:main",

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -30,13 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junghoon.movie.core.domain.model.Movie
-import com.junghoon.movie.core.ui.AnimatedLoadingView
-import com.junghoon.movie.core.ui.NetworkImage
 import com.junghoon.movie.core.ui.base.ErrorState
+import com.junghoon.movie.core.ui.component.AnimatedLoadingView
+import com.junghoon.movie.core.ui.component.LikeIcon
+import com.junghoon.movie.core.ui.component.MoviePoster
+import com.junghoon.movie.core.ui.component.NetworkImage
 import com.junghoon.movie.core.ui.theme.MovieTheme
 import com.junghoon.movie.core.ui.theme.PaleGray
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun HomeRoute(
@@ -63,43 +66,58 @@ internal fun HomeRoute(
             .fillMaxSize()
             .padding(padding)
     ) {
-        HomeScreen(homeUiState = homeUiState, onMovieClick = onMovieClick)
+        HomeScreen(
+            homeUiState = homeUiState,
+            onMovieClick = onMovieClick,
+            onLikeClick = { id, isLike ->
+                viewModel.updateLikeMovie(id, isLike)
+            }
+        )
     }
 }
 
 @Composable
 private fun HomeScreen(
     homeUiState: HomeUiState,
-    onMovieClick: (Int) -> Unit
+    onMovieClick: (Int) -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
 ) {
     when (homeUiState) {
         is HomeUiState.Empty -> Unit
         is HomeUiState.Loading -> AnimatedLoadingView(modifier = Modifier.fillMaxSize())
-        is HomeUiState.Movies -> HomeSection(homeUiState = homeUiState, onMovieClick = onMovieClick)
+        is HomeUiState.Movies -> HomeSection(
+            homeUiState = homeUiState,
+            onMovieClick = onMovieClick,
+            onLikeClick = onLikeClick
+        )
     }
 }
 
 @Composable
-private fun HomeSection(homeUiState: HomeUiState.Movies, onMovieClick: (Int) -> Unit) {
+private fun HomeSection(
+    homeUiState: HomeUiState.Movies,
+    onMovieClick: (Int) -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
+) {
     LazyColumn(
         contentPadding = PaddingValues(vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         if (homeUiState.nowPlaying.isNotEmpty()) {
             item {
-                NowPlaySection(homeUiState.nowPlaying, onMovieClick = onMovieClick)
+                NowPlaySection(homeUiState.nowPlaying, onMovieClick = onMovieClick, onLikeClick = onLikeClick)
             }
         }
 
         if (homeUiState.topRated.isNotEmpty()) {
             item {
-                TopRatedSection(homeUiState.topRated, onMovieClick = onMovieClick)
+                TopRatedSection(homeUiState.topRated, onMovieClick = onMovieClick, onLikeClick = onLikeClick)
             }
         }
 
         if (homeUiState.upcoming.isNotEmpty()) {
             item {
-                UpcomingSection(homeUiState.upcoming, onMovieClick = onMovieClick)
+                UpcomingSection(homeUiState.upcoming, onMovieClick = onMovieClick, onLikeClick = onLikeClick)
             }
         }
     }
@@ -111,7 +129,7 @@ private fun HomeSectionTitle(modifier: Modifier = Modifier, title: String) {
 }
 
 @Composable
-fun TopRatedSection(movies: PersistentList<Movie>, onMovieClick: (Int) -> Unit) {
+fun TopRatedSection(movies: PersistentList<Movie>, onMovieClick: (Int) -> Unit, onLikeClick: (Int, Boolean) -> Unit) {
     Column {
         HomeSectionTitle(
             modifier = Modifier.padding(horizontal = 20.dp),
@@ -135,8 +153,12 @@ fun TopRatedSection(movies: PersistentList<Movie>, onMovieClick: (Int) -> Unit) 
                         .fillParentMaxWidth(1f)
                         .height(180.dp),
                     poster = it.backdropPath,
+                    isLike = it.isLike,
                     onMovieClick = {
                         onMovieClick(it.id)
+                    },
+                    onLikeClick = {
+                        onLikeClick(it.id, !it.isLike)
                     }
                 )
             }
@@ -145,7 +167,11 @@ fun TopRatedSection(movies: PersistentList<Movie>, onMovieClick: (Int) -> Unit) 
 }
 
 @Composable
-private fun NowPlaySection(movies: PersistentList<Movie>, onMovieClick: (Int) -> Unit) {
+private fun NowPlaySection(
+    movies: PersistentList<Movie>,
+    onMovieClick: (Int) -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
+) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         HomeSectionTitle(title = stringResource(id = R.string.now_playing_label))
 
@@ -163,8 +189,12 @@ private fun NowPlaySection(movies: PersistentList<Movie>, onMovieClick: (Int) ->
                         .width(150.dp)
                         .height(200.dp),
                     poster = it.posterPath,
+                    isLike = it.isLike,
                     onMovieClick = {
                         onMovieClick(it.id)
+                    },
+                    onLikeClick = {
+                        onLikeClick(it.id, !it.isLike)
                     }
                 )
             }
@@ -173,7 +203,11 @@ private fun NowPlaySection(movies: PersistentList<Movie>, onMovieClick: (Int) ->
 }
 
 @Composable
-private fun UpcomingSection(movies: PersistentList<Movie>, onMovieClick: (Int) -> Unit) {
+private fun UpcomingSection(
+    movies: PersistentList<Movie>,
+    onMovieClick: (Int) -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
+) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         HomeSectionTitle(title = stringResource(id = R.string.upcoming_label))
 
@@ -191,28 +225,18 @@ private fun UpcomingSection(movies: PersistentList<Movie>, onMovieClick: (Int) -
                         .width(150.dp)
                         .height(200.dp),
                     poster = it.posterPath,
+                    isLike = it.isLike,
                     onMovieClick = {
                         onMovieClick(it.id)
+                    },
+                    onLikeClick = {
+                        onLikeClick(it.id, !it.isLike)
                     }
                 )
             }
         }
     }
 }
-
-@Composable
-fun MoviePoster(modifier: Modifier, poster: String?, onMovieClick: () -> Unit) {
-    NetworkImage(
-        imageUrl = poster,
-        placeholder = ColorPainter(PaleGray),
-        modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
-            .clickable {
-                onMovieClick()
-            }
-    )
-}
-
 
 @Preview
 @Composable
@@ -223,7 +247,8 @@ private fun HomScreenPreview(
     MovieTheme {
         HomeScreen(
             homeUiState = homeUiState,
-            onMovieClick = {}
+            onMovieClick = {},
+            onLikeClick = { _, _ -> }
         )
     }
 }

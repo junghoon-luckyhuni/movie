@@ -6,6 +6,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
 
 class GetPopularMovieUseCaseTest : BehaviorSpec({
     val movieRepository: MovieRepository = mockk()
@@ -19,7 +20,7 @@ class GetPopularMovieUseCaseTest : BehaviorSpec({
         When("null인 페이지를 호출하면") {
             coEvery { movieRepository.getPopularMovies(null) } returns expectedPage1
 
-            val actual = useCase.invoke()
+            val actual = useCase.invoke().first()
 
             Then("canPaginate는 true이다") {
                 useCase.canPaginate shouldBe true
@@ -33,7 +34,7 @@ class GetPopularMovieUseCaseTest : BehaviorSpec({
         When("다음 페이지 호출 결과에 이전 페이지의 데이터와 동일한 id=1 인 중복이 있으면") {
             coEvery { movieRepository.getPopularMovies(2) } returns expectedPage2
 
-            val actual = useCase.invoke()
+            val actual = useCase.invoke().first()
 
             Then("canPaginate는 true이다") {
                 useCase.canPaginate shouldBe true
@@ -47,7 +48,7 @@ class GetPopularMovieUseCaseTest : BehaviorSpec({
         When("마지막 페이지인 3번째 페이지를 호출하면") {
             coEvery { movieRepository.getPopularMovies(3) } returns expectedPage3
 
-            val actual = useCase.invoke()
+            val actual = useCase.invoke().first()
 
             Then("canPaginate는 false이다") {
                 useCase.canPaginate shouldBe false
@@ -59,7 +60,7 @@ class GetPopularMovieUseCaseTest : BehaviorSpec({
         }
 
         When("페이징이 불가능 한 상태에서 호출하면") {
-            val actual = useCase.invoke()
+            val actual = useCase.invoke().first()
 
             Then("canPaginate는 true이다") {
                 useCase.canPaginate shouldBe false
@@ -71,7 +72,7 @@ class GetPopularMovieUseCaseTest : BehaviorSpec({
         }
 
         When("pullToRefresh를 실행하면") {
-            val actual = useCase.invoke(pullToRefresh = true)
+            val actual = useCase.invoke(pullToRefresh = true).first()
 
             Then("canPaginate는 true이다") {
                 useCase.canPaginate shouldBe true

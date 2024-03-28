@@ -2,6 +2,8 @@ package com.junghoon.movie.core.data.di
 
 import com.junghoon.movie.core.data.repository.MovieRepositoryImpl
 import com.junghoon.movie.core.domain.repository.MovieRepository
+import com.junghoon.movie.datastore.datastore.MoviePreferencesDataSource
+import com.junghoon.movie.datastore.datastore.MoviePreferencesDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,4 +18,9 @@ internal abstract class DataModule {
     abstract fun bindsMovieRepository(
         repository: MovieRepositoryImpl,
     ): MovieRepository
+
+    @Binds
+    abstract fun bindMovieDataSource(
+        dataSource: MoviePreferencesDataSourceImpl,
+    ): MoviePreferencesDataSource
 }

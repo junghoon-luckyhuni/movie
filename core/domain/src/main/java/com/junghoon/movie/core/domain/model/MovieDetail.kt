@@ -13,6 +13,7 @@ data class MovieDetail(
     val tagline: String,
     val rating: Double,
     val overview: String,
+    val isLike: Boolean
 ) {
     companion object {
         fun createFake() = MovieDetail(
@@ -22,7 +23,8 @@ data class MovieDetail(
             title = "Blue_Whale",
             tagline = "Brace yourself",
             rating = 8.5,
-            overview = "Characters from different"
+            overview = "Characters from different",
+            isLike = false
         )
     }
 }

@@ -1,6 +1,5 @@
 package com.junghoon.movie.feature
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +13,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,17 +22,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junghoon.movie.core.domain.model.Movie
-import com.junghoon.movie.core.ui.AnimatedLoadingView
-import com.junghoon.movie.core.ui.NetworkImage
 import com.junghoon.movie.core.ui.base.ErrorState
+import com.junghoon.movie.core.ui.component.AnimatedLoadingView
+import com.junghoon.movie.core.ui.component.MoviePoster
 import com.junghoon.movie.core.ui.theme.MovieTheme
-import com.junghoon.movie.core.ui.theme.PaleGray
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -63,6 +58,9 @@ internal fun PopularRoute(
             onMovieClick = onMovieClick,
             onLoadMore = {
                 viewModel.loadMorePopular()
+            },
+            onLikeClick = { id, isLike ->
+                viewModel.updateLikeMovie(id, isLike)
             }
         )
 
@@ -73,7 +71,7 @@ internal fun PopularRoute(
 }
 
 @Composable
-fun PopularScreen(popular: PersistentList<Movie>, onMovieClick: (Int) -> Unit, onLoadMore: () -> Unit) {
+fun PopularScreen(popular: PersistentList<Movie>, onMovieClick: (Int) -> Unit, onLoadMore: () -> Unit, onLikeClick: (Int, Boolean) -> Unit) {
     val gridState = rememberLazyGridState()
     val shouldStartPaginate = remember {
         derivedStateOf {
@@ -101,30 +99,30 @@ fun PopularScreen(popular: PersistentList<Movie>, onMovieClick: (Int) -> Unit, o
                 movie.id
             }
         ) { movie ->
-            MovieView(movie = movie,
+            MovieView(
+                movie = movie,
                 onMovieClick = {
                     onMovieClick(movie.id)
-                }
+                },
+                onLikeClick = onLikeClick
             )
         }
     }
 }
 
 @Composable
-private fun MovieView(movie: Movie, onMovieClick: () -> Unit) {
-    Column(
-        modifier = Modifier.clickable {
-            onMovieClick()
-        },
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        NetworkImage(
-            imageUrl = movie.posterPath,
-            placeholder = ColorPainter(PaleGray),
+private fun MovieView(movie: Movie, onMovieClick: () -> Unit, onLikeClick: (Int, Boolean) -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        MoviePoster(
             modifier = Modifier
                 .width(150.dp)
-                .height(200.dp)
-                .clip(RoundedCornerShape(10.dp))
+                .height(200.dp),
+            poster = movie.posterPath,
+            isLike = movie.isLike,
+            onMovieClick = onMovieClick,
+            onLikeClick = {
+                onLikeClick(movie.id, !movie.isLike)
+            }
         )
 
         Spacer(modifier = Modifier.height(10.dp))

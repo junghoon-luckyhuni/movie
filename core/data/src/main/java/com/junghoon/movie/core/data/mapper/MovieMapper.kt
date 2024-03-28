@@ -11,7 +11,8 @@ internal fun MovieResponse.toData(): Movie =
         id = id,
         backdropPath = "${IMAGE_DOMAIN}${this.backdropPath}",
         posterPath = "${IMAGE_DOMAIN}${this.posterPath}",
-        title = title
+        title = title,
+        isLike = false
     )
 
 
@@ -23,5 +24,6 @@ internal fun MovieDetailResponse.toData(): MovieDetail =
         title = title,
         tagline = tagline,
         rating = rating,
-        overview = overview
+        overview = overview,
+        isLike = false
     )

@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetHomeMovieUseCase @Inject constructor(
     private val movieRepository: MovieRepository,
 ) {
-    suspend operator fun invoke(movieType: MovieType): Flow<List<Movie>> {
+    operator fun invoke(movieType: MovieType): Flow<List<Movie>> {
         return movieRepository.getHomeMovies(movieType)
     }
 }

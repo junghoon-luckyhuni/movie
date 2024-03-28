@@ -9,14 +9,16 @@ data class Movie(
     val id: Int,
     val backdropPath: String?,
     val posterPath: String,
-    val title: String
+    val title: String,
+    val isLike: Boolean
 ) {
     companion object {
         fun createFake(id: Int = 1) = Movie(
             id = id,
             backdropPath = "${IMAGE_DOMAIN}sKdDC38FHuPvEsRgIzMEQE6ydol.jpg",
             posterPath = "${IMAGE_DOMAIN}2TmZ2lgDEYJAFpeUMALRx5NwqK.jpg",
-            title = "Blue_Whale"
+            title = "Blue_Whale",
+            isLike = false
         )
     }
 }
