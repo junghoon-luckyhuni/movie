@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -31,6 +32,7 @@ import com.junghoon.movie.core.ui.component.AnimatedLoadingView
 import com.junghoon.movie.core.ui.component.MoviePoster
 import com.junghoon.movie.core.ui.theme.MovieTheme
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 internal fun PopularRoute(
@@ -71,7 +73,12 @@ internal fun PopularRoute(
 }
 
 @Composable
-fun PopularScreen(popular: PersistentList<Movie>, onMovieClick: (Int) -> Unit, onLoadMore: () -> Unit, onLikeClick: (Int, Boolean) -> Unit) {
+fun PopularScreen(
+    popular: PersistentList<Movie>,
+    onMovieClick: (Int) -> Unit,
+    onLoadMore: () -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
+) {
     val gridState = rememberLazyGridState()
     val shouldStartPaginate = remember {
         derivedStateOf {
@@ -131,6 +138,22 @@ private fun MovieView(movie: Movie, onMovieClick: () -> Unit, onLikeClick: (Int,
             text = movie.title,
             style = MovieTheme.typography.bodySmallR,
             color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PopularScreenPreview() {
+    MovieTheme {
+        val popular = mutableListOf<Movie>()
+        repeat(8) { popular.add(Movie.createFake(id = it)) }
+
+        PopularScreen(
+            popular = popular.toPersistentList(),
+            onMovieClick = { },
+            onLoadMore = {},
+            onLikeClick = { _, _ -> }
         )
     }
 }

@@ -27,10 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,6 +41,7 @@ import com.junghoon.movie.core.ui.component.AnimatedLoadingView
 import com.junghoon.movie.core.ui.component.LikeIcon
 import com.junghoon.movie.core.ui.component.NetworkImage
 import com.junghoon.movie.core.ui.component.RatingBar
+import com.junghoon.movie.core.ui.theme.MovieTheme
 import com.junghoon.movie.core.ui.theme.PaleGray
 import com.junghoon.movie.feature.detail.R
 
@@ -228,6 +229,18 @@ fun OverviewSection(
         Text(
             text = movieDetail.overview,
             style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun MovieDetailScreenPreview() {
+    MovieTheme {
+        MovieDetailScreen(
+            uiState = DetailUiState.Detail(MovieDetail.createFake()),
+            onBackClick = { },
+            onLikeClick = { _, _ -> }
         )
     }
 }

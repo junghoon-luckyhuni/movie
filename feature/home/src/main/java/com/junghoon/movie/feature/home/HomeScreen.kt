@@ -240,7 +240,7 @@ private fun UpcomingSection(
 
 @Preview
 @Composable
-private fun HomScreenPreview(
+private fun HomeScreenPreview(
     @PreviewParameter(HomeUiStatePreviewParameterProvider::class)
     homeUiState: HomeUiState,
 ) {
