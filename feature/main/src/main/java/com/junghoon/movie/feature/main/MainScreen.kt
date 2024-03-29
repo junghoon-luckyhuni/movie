@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -186,4 +187,15 @@ private fun RowScope.MainBottomBarItem(
             color = tintColor
         )
     }
+}
+
+@Preview
+@Composable
+fun MainBottomBarPreview() {
+    MainBottomBar(
+        visible = true,
+        tabs = MainTab.values().toList().toPersistentList(),
+        currentTab = null,
+        onTabSelected = {  }
+    )
 }
