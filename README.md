@@ -62,4 +62,6 @@
 
 ### ScreenShot
 
-<img alt="image" src="https://github.com/junghoon-luckyhuni/movie/assets/35446333/533ad1a8-9841-4c0d-9173-151c2a73d7d7">
+https://github.com/user-attachments/assets/106428ad-af63-4fc9-9c45-c6481629bce6
+
+![movie_screenshot](https://github.com/user-attachments/assets/559b7418-de1e-4c39-841d-823e0900f356)
